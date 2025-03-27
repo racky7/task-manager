@@ -6,9 +6,15 @@ import { Loader, PlusIcon } from "lucide-react";
 import { useCreateTaskModal } from "./_hooks/use-create-task-modal";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/data-table-columns";
+import { api } from "@/trpc/react";
+import { useProjectId } from "../_hooks/use-project-id";
 
 export default function ProjectTasksClient() {
   const { open } = useCreateTaskModal();
+  const projectId = useProjectId();
+  const { data: tasks, isLoading: isTasksLoading } = api.task.getTasks.useQuery(
+    { projectId },
+  );
 
   return (
     <div className="flex flex-col">
@@ -21,14 +27,14 @@ export default function ProjectTasksClient() {
             </Button>
           </div>
           <Separator className="my-4" />
-          {false ? (
+          {isTasksLoading ? (
             <div className="flex h-[200px] w-full flex-col items-center justify-center rounded-lg border">
               <Loader className="size-5 animate-spin text-muted-foreground" />
             </div>
           ) : (
             <>
               <div className="mt-0">
-                <DataTable columns={columns} data={{}} />
+                <DataTable columns={columns} data={tasks!} />
               </div>
             </>
           )}

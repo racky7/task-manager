@@ -32,6 +32,7 @@ import {
   TASK_STATUS,
   TASK_STATUS_MAP,
 } from "../_lib/constants";
+import { toast } from "sonner";
 
 const createTaskConfig = z.object({
   title: z.string(),
@@ -43,13 +44,31 @@ const createTaskConfig = z.object({
 });
 
 export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
+  const utils = api.useUtils();
   const projectId = useProjectId();
   const { data: members } = api.member.getMembers.useQuery({ projectId });
   const form = useForm<z.infer<typeof createTaskConfig>>({
     resolver: zodResolver(createTaskConfig),
   });
+  const { mutate, isPending } = api.task.createTask.useMutation();
 
-  const onSubmit = (values: z.infer<typeof createTaskConfig>) => {};
+  const onSubmit = (values: z.infer<typeof createTaskConfig>) => {
+    mutate(
+      { ...values, projectId },
+      {
+        onSuccess: () => {
+          void utils.task.getTasks.invalidate();
+          toast.success("Task created successfully");
+          form.reset();
+          onCancel?.();
+        },
+        onError: (err) => {
+          console.log(err);
+          toast.error("Failed to create task!");
+        },
+      },
+    );
+  };
 
   return (
     <Card className="h-full w-full border-none shadow-none">
@@ -169,7 +188,10 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
                         </FormControl>
                         <SelectContent>
                           {members?.map((member) => (
-                            <SelectItem key={member.id} value={member.id}>
+                            <SelectItem
+                              key={member.user.id}
+                              value={member.user.id}
+                            >
                               <div className="flex items-center gap-x-2">
                                 {member.user.name}
                               </div>
@@ -203,7 +225,7 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
               <div className="w-full sm:w-fit">
                 <Button
                   className="w-full sm:w-auto"
-                  //   disabled={isPending}
+                  disabled={isPending}
                   type="submit"
                   size="lg"
                 >

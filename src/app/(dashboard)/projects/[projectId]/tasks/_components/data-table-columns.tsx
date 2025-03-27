@@ -8,11 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { TASK_PRIORITY_MAP, TASK_STATUS_MAP } from "../_lib/constants";
 
 export const columns: ColumnDef<
-  Task & { assignee: { name: string; email: string } }
+  Task & { assignee?: { id: string; name: string | null } | null }
 >[] = [
   {
     accessorKey: "title",
-    header: ({ column }) => {
+    header: () => {
       return <div>Task Title</div>;
     },
     cell: ({ row }) => {
@@ -27,6 +27,7 @@ export const columns: ColumnDef<
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Assignee
@@ -39,12 +40,16 @@ export const columns: ColumnDef<
 
       return (
         <div className="flex items-center gap-x-2 text-sm font-medium">
-          <MemberAvatar
-            name={assignee.name}
-            fallbackClassName="text-xs"
-            className="size-6"
-          />
-          <p className="line-clamp-1">{assignee.name}</p>
+          {assignee?.name ? (
+            <>
+              <MemberAvatar
+                name={assignee.name}
+                fallbackClassName="text-xs"
+                className="size-6"
+              />
+              <p className="line-clamp-1">{assignee.name}</p>
+            </>
+          ) : null}
         </div>
       );
     },
@@ -55,6 +60,7 @@ export const columns: ColumnDef<
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Due Date
@@ -80,6 +86,7 @@ export const columns: ColumnDef<
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Status
@@ -107,6 +114,7 @@ export const columns: ColumnDef<
       return (
         <Button
           variant="ghost"
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Priority
