@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Separator } from "./ui/separator";
 import { ProjectSwitcher } from "./project-switcher";
+import { Navigation } from "./navigation";
 
 export const Sidebar = () => {
   return (
@@ -10,6 +11,8 @@ export const Sidebar = () => {
       </Link>
       <Separator className="my-4" />
       <ProjectSwitcher />
+      <Separator className="my-4" />
+      <Navigation />
     </div>
   );
 };
