@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Loader, PlusIcon } from "lucide-react";
 import { useCreateTaskModal } from "./_hooks/use-create-task-modal";
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/data-table-columns";
 
 export default function ProjectTasksClient() {
   const { open } = useCreateTaskModal();
@@ -25,7 +27,9 @@ export default function ProjectTasksClient() {
             </div>
           ) : (
             <>
-              <div className="mt-0">Data Table</div>
+              <div className="mt-0">
+                <DataTable columns={columns} data={{}} />
+              </div>
             </>
           )}
         </div>

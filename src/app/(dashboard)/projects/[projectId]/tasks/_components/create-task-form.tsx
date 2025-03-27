@@ -26,9 +26,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useProjectId } from "../../_hooks/use-project-id";
-
-const TASK_STATUS = ["TODO", "INPROGRESS", "INREVIEW", "DONE"] as const;
-const TASK_PRIORITY = ["LOW", "MEDIUM", "HIGH"] as const;
+import {
+  TASK_PRIORITY,
+  TASK_PRIORITY_MAP,
+  TASK_STATUS,
+  TASK_STATUS_MAP,
+} from "../_lib/constants";
 
 const createTaskConfig = z.object({
   title: z.string(),
@@ -213,44 +216,4 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
       </CardContent>
     </Card>
   );
-};
-
-const TASK_STATUS_MAP: Record<
-  (typeof TASK_STATUS)[number],
-  { key: string; label: string }
-> = {
-  TODO: {
-    key: "TODO",
-    label: "To Do",
-  },
-  INPROGRESS: {
-    key: "INPROGRESS",
-    label: "In Progress",
-  },
-  INREVIEW: {
-    key: "INREVIEW",
-    label: "In Review",
-  },
-  DONE: {
-    key: "DONE",
-    label: "Done",
-  },
-};
-
-const TASK_PRIORITY_MAP: Record<
-  (typeof TASK_PRIORITY)[number],
-  { key: string; label: string }
-> = {
-  LOW: {
-    key: "LOW",
-    label: "Low",
-  },
-  MEDIUM: {
-    key: "MEDIUM",
-    label: "Medium",
-  },
-  HIGH: {
-    key: "HIGH",
-    label: "High",
-  },
 };
