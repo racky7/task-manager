@@ -9,7 +9,10 @@ export default function CreateTaskModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="hide-scrollbar max-h-[85vh] w-full overflow-y-auto border-none p-0 sm:max-w-lg">
+      <DialogContent
+        className="hide-scrollbar max-h-[85vh] w-full overflow-y-auto border-none p-0 sm:max-w-lg"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <CreateTaskForm onCancel={close} />
       </DialogContent>
     </Dialog>

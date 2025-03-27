@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { useProjectId } from "../../_hooks/use-project-id";
 
 const TASK_STATUS = ["TODO", "INPROGRESS", "INREVIEW", "DONE"] as const;
 const TASK_PRIORITY = ["LOW", "MEDIUM", "HIGH"] as const;
@@ -37,11 +39,9 @@ const createTaskConfig = z.object({
   priority: z.enum(TASK_PRIORITY),
 });
 
-export const CreateTaskForm = ({
-  onCancel,
-}: {
-  onCancel: (value: boolean) => void;
-}) => {
+export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
+  const projectId = useProjectId();
+  const { data: members } = api.member.getMembers.useQuery({ projectId });
   const form = useForm<z.infer<typeof createTaskConfig>>({
     resolver: zodResolver(createTaskConfig),
   });
@@ -164,7 +164,15 @@ export const CreateTaskForm = ({
                             <SelectValue placeholder="Select assignee" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent></SelectContent>
+                        <SelectContent>
+                          {members?.map((member) => (
+                            <SelectItem key={member.id} value={member.id}>
+                              <div className="flex items-center gap-x-2">
+                                {member.user.name}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
                       </Select>
                     </FormControl>
                     <FormMessage />

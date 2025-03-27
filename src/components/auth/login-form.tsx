@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-// import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 const loginConfig = z.object({
   email: z.string().email(),
@@ -27,7 +27,6 @@ const loginConfig = z.object({
 export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  // const { toast } = useToast();
 
   const form = useForm<z.infer<typeof loginConfig>>({
     defaultValues: {
@@ -46,12 +45,14 @@ export default function LoginForm() {
     });
 
     if (result?.error) {
+      toast.error("Failed to login! try again");
       setLoading(false);
       console.error(result.error);
     } else {
+      form.reset();
+      toast.success("Login successfully");
       router.push("/");
     }
-    // loginMutation.mutate(values);
   };
 
   return (

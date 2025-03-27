@@ -7,6 +7,7 @@ import { useCreateTaskModal } from "./_hooks/use-create-task-modal";
 
 export default function ProjectTasksClient() {
   const { open } = useCreateTaskModal();
+
   return (
     <div className="flex flex-col">
       <div className="w-full flex-1 rounded-lg border">

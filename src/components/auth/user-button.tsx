@@ -11,10 +11,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { api } from "@/trpc/react";
 import { Separator } from "../ui/separator";
+import { signOut } from "next-auth/react";
 
 export const UserButton = () => {
   const { data: user, isLoading } = api.user.getCurrentUser.useQuery();
-  //   const { mutate: logout } = useLogout();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
 
   if (isLoading)
     return (
@@ -61,7 +65,7 @@ export const UserButton = () => {
         </div>
         <Separator className="mb-1" />
         <DropdownMenuItem
-          //   onClick={() => logout()}
+          onClick={handleLogout}
           className="flex h-10 cursor-pointer items-center justify-center font-medium text-amber-700"
         >
           <LogOut className="mr-2 size-4" />

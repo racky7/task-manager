@@ -1,8 +1,4 @@
-import {
-  protectedProcedure,
-  publicProcedure,
-  createTRPCRouter,
-} from "@/server/api/trpc";
+import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
 import { createProject, getProjects } from "./project.service";
 import { createProjectInput } from "./project.input";
 
