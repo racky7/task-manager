@@ -16,7 +16,7 @@ import {
 const routes = [
   {
     href: "",
-    label: "Home",
+    label: "Dashboard",
     icon: GoHome,
     activeIcon: GoHomeFill,
   },
