@@ -4,11 +4,20 @@ import { type getUserInput, type signUpUserInput } from "./user.input";
 import { db } from "@/server/db";
 import bcrypt from "bcryptjs";
 import { TRPCError } from "@trpc/server";
+import { type Session } from "next-auth";
 
 export function getUser(input: z.infer<typeof getUserInput>) {
   return db.user.findUnique({
     where: {
       id: input.id,
+    },
+  });
+}
+
+export function getCurrentUser(session: Session) {
+  return db.user.findUnique({
+    where: {
+      id: session.user.id,
     },
   });
 }

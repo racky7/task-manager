@@ -44,7 +44,7 @@ export default function LoginForm() {
       password: values.password,
       redirect: false,
     });
-    console.log(result);
+
     if (result?.error) {
       setLoading(false);
       console.error(result.error);

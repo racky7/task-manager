@@ -10,8 +10,3 @@ export const signUpUserInput = z.object({
   email: z.string().email(),
   password: z.string(),
 });
-
-export const logInUserInput = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});

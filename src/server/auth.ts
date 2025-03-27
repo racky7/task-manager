@@ -97,7 +97,7 @@ export const authOptions: NextAuthOptions = {
             password,
             user.password as string,
           );
-          console.log("user - ", user);
+
           if (passwordMatch) return user;
         }
 
