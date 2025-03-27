@@ -9,6 +9,14 @@ const pathnameMap = {
     title: "My Tasks",
     description: "View all of your tasks here",
   },
+  settings: {
+    title: "Settings",
+    description: "Manage your project settings here",
+  },
+  members: {
+    title: "Members",
+    description: "Manage your project members here",
+  },
 };
 
 const defaultMap = {
