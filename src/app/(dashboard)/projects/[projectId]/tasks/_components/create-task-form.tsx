@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const TASK_STATUS = ["TODO", "INPROGRESS", "INREVIEW", "DONE"] as const;
 const TASK_PRIORITY = ["LOW", "MEDIUM", "HIGH"] as const;
@@ -36,7 +37,11 @@ const createTaskConfig = z.object({
   priority: z.enum(TASK_PRIORITY),
 });
 
-export const CreateTaskForm = () => {
+export const CreateTaskForm = ({
+  onCancel,
+}: {
+  onCancel: (value: boolean) => void;
+}) => {
   const form = useForm<z.infer<typeof createTaskConfig>>({
     resolver: zodResolver(createTaskConfig),
   });
@@ -177,9 +182,9 @@ export const CreateTaskForm = () => {
                   size="lg"
                   type="button"
                   variant="secondary"
-                  //   onClick={onCancel}
+                  onClick={onCancel}
                   //   disabled={isPending}
-                  //   className={cn("w-full sm:w-auto", !onCancel && "invisible")}
+                  className={cn("w-full sm:w-auto", !onCancel && "invisible")}
                 >
                   Cancel
                 </Button>

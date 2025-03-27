@@ -67,6 +67,20 @@ model Project {
     updatedAt  DateTime @updatedAt
 }
 
+enum MemberRole {
+    ADMIN
+    MEMBER
+}
+
+model Member {
+    id        String     @id @default(cuid())
+    projectId String
+    userId    String
+    role      MemberRole
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+}
+
 enum TaskStatus {
     TODO
     INPROGRESS
