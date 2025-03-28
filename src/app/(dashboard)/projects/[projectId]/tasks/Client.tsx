@@ -8,12 +8,15 @@ import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/data-table-columns";
 import { api } from "@/trpc/react";
 import { useProjectId } from "../../_hooks/use-project-id";
+import DataFilters from "./_components/data-filters";
+import { useTaskFilters } from "./_hooks/use-task-filters";
 
 export default function ProjectTasksClient() {
   const { open } = useCreateTaskModal();
+  const [{ status, priority, assigneeId }] = useTaskFilters();
   const projectId = useProjectId();
   const { data: tasks, isLoading: isTasksLoading } = api.task.getTasks.useQuery(
-    { projectId },
+    { projectId, status, priority, assigneeId },
   );
 
   return (
@@ -27,6 +30,9 @@ export default function ProjectTasksClient() {
             </Button>
           </div>
           <Separator className="my-4" />
+          <DataFilters />
+          <Separator className="my-4" />
+
           {isTasksLoading ? (
             <div className="flex h-[200px] w-full flex-col items-center justify-center rounded-lg border">
               <Loader className="size-5 animate-spin text-muted-foreground" />

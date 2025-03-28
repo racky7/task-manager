@@ -61,6 +61,9 @@ export async function getTasks(
   return db.task.findMany({
     where: {
       projectId: input.projectId,
+      assigneeId: input.assigneeId ?? undefined,
+      status: input.status ?? undefined,
+      priority: input.priority ?? undefined,
     },
     include: {
       assignee: {

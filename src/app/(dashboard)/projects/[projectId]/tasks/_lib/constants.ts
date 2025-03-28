@@ -1,7 +1,7 @@
 export const TASK_STATUS = ["TODO", "INPROGRESS", "INREVIEW", "DONE"] as const;
-
+export type TaskStatus = (typeof TASK_STATUS)[number];
 export const TASK_STATUS_MAP: Record<
-  (typeof TASK_STATUS)[number],
+  TaskStatus,
   { key: string; label: string; color: string }
 > = {
   TODO: {
@@ -27,9 +27,9 @@ export const TASK_STATUS_MAP: Record<
 };
 
 export const TASK_PRIORITY = ["LOW", "MEDIUM", "HIGH"] as const;
-
+export type TaskPriority = (typeof TASK_PRIORITY)[number];
 export const TASK_PRIORITY_MAP: Record<
-  (typeof TASK_PRIORITY)[number],
+  TaskPriority,
   { key: string; label: string }
 > = {
   LOW: {
