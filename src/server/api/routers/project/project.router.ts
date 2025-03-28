@@ -1,6 +1,16 @@
 import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
-import { createProject, getProjects } from "./project.service";
-import { createProjectInput } from "./project.input";
+import {
+  createProject,
+  getProject,
+  getProjectInfo,
+  getProjects,
+  joinProject,
+} from "./project.service";
+import {
+  createProjectInput,
+  getProjectInput,
+  joinProjectInput,
+} from "./project.input";
 
 export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
@@ -9,4 +19,13 @@ export const projectRouter = createTRPCRouter({
   getProjects: protectedProcedure.query(({ ctx: { session } }) =>
     getProjects(session),
   ),
+  getProject: protectedProcedure
+    .input(getProjectInput)
+    .query(({ input, ctx: { session } }) => getProject(input, session)),
+  getProjectInfo: protectedProcedure
+    .input(getProjectInput)
+    .query(({ input }) => getProjectInfo(input)),
+  joinProject: protectedProcedure
+    .input(joinProjectInput)
+    .mutation(({ input, ctx: { session } }) => joinProject(input, session)),
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useProjectId } from "@/app/(dashboard)/projects/[projectId]/_hooks/use-project-id";
+import { useProjectId } from "@/app/(dashboard)/projects/_hooks/use-project-id";
 import { cn } from "@/lib/utils";
 import { Settings } from "lucide-react";
 import Link from "next/link";

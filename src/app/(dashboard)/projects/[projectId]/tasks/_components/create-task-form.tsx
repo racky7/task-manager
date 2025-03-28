@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { useProjectId } from "../../_hooks/use-project-id";
+import { useProjectId } from "../../../_hooks/use-project-id";
 import {
   TASK_PRIORITY,
   TASK_PRIORITY_MAP,

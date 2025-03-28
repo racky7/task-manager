@@ -7,7 +7,7 @@ import { useCreateTaskModal } from "./_hooks/use-create-task-modal";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/data-table-columns";
 import { api } from "@/trpc/react";
-import { useProjectId } from "../_hooks/use-project-id";
+import { useProjectId } from "../../_hooks/use-project-id";
 
 export default function ProjectTasksClient() {
   const { open } = useCreateTaskModal();

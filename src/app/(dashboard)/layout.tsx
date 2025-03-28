@@ -1,9 +1,9 @@
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { HydrateClient } from "@/trpc/server";
-import { CreateProjectModal } from "./projects/[projectId]/_components/create-project-modal";
-import CreateTaskModal from "./projects/[projectId]/tasks/_components/create-task-modal";
+import { CreateProjectModal } from "./projects/_components/create-project-modal";
 import EditTaskModal from "./projects/[projectId]/tasks/_components/edit-task-modal";
+import CreateTaskModal from "./projects/[projectId]/tasks/_components/create-task-modal";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (

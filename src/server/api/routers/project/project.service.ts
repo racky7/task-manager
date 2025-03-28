@@ -1,8 +1,13 @@
 import type { z } from "zod";
-import type { createProjectInput } from "./project.input";
+import type {
+  createProjectInput,
+  getProjectInput,
+  joinProjectInput,
+} from "./project.input";
 import { type Session } from "next-auth";
 import { db } from "@/server/db";
 import { generateInviteCode } from "@/lib/utils";
+import { TRPCError } from "@trpc/server";
 
 export async function createProject(
   input: z.infer<typeof createProjectInput>,
@@ -43,6 +48,77 @@ export async function getProjects(session: Session) {
   return db.project.findMany({
     where: {
       id: { in: projectIds },
+    },
+  });
+}
+
+export async function getProject(
+  input: z.infer<typeof getProjectInput>,
+  session: Session,
+) {
+  const member = await db.member.findFirst({
+    where: {
+      projectId: input.projectId,
+      userId: session.user.id,
+    },
+  });
+
+  if (!member) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Member does not belong to project",
+    });
+  }
+
+  return db.project.findUnique({
+    where: { id: input.projectId },
+  });
+}
+
+export async function getProjectInfo(input: z.infer<typeof getProjectInput>) {
+  return db.project.findUnique({
+    where: { id: input.projectId },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+}
+
+export async function joinProject(
+  input: z.infer<typeof joinProjectInput>,
+  session: Session,
+) {
+  const member = await db.member.findFirst({
+    where: {
+      projectId: input.projectId,
+      userId: session.user.id,
+    },
+  });
+
+  if (member) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Already a member",
+    });
+  }
+
+  const project = await db.project.findUnique({
+    where: { id: input.projectId },
+  });
+
+  if (project?.inviteCode !== input.code) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Invalide invite code",
+    });
+  }
+
+  return db.member.create({
+    data: {
+      projectId: input.projectId,
+      userId: session.user.id,
+      role: "MEMBER",
     },
   });
 }

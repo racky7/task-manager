@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
-import { useProjectId } from "../_hooks/use-project-id";
+import { useProjectId } from "../../_hooks/use-project-id";
 import { useState } from "react";
 
 export default function ProjectSettingsClient() {

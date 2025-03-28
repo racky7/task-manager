@@ -1,4 +1,4 @@
-import CreateProjectForm from "@/app/(dashboard)/projects/[projectId]/_components/create-project-form";
+import CreateProjectForm from "@/app/(dashboard)/projects/_components/create-project-form";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
 

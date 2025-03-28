@@ -10,9 +10,9 @@ import {
 import { RiAddCircleFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
-import { useProjectId } from "@/app/(dashboard)/projects/[projectId]/_hooks/use-project-id";
+import { useProjectId } from "@/app/(dashboard)/projects/_hooks/use-project-id";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { useCreateProjecteModal } from "@/app/(dashboard)/projects/[projectId]/_hooks/use-create-project-modal";
+import { useCreateProjecteModal } from "@/app/(dashboard)/projects/_hooks/use-create-project-modal";
 
 export const ProjectSwitcher = () => {
   const router = useRouter();
