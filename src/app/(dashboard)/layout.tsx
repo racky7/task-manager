@@ -3,12 +3,14 @@ import { Sidebar } from "@/components/sidebar";
 import { HydrateClient } from "@/trpc/server";
 import { CreateProjectModal } from "./projects/[projectId]/_components/create-project-modal";
 import CreateTaskModal from "./projects/[projectId]/tasks/_components/create-task-modal";
+import EditTaskModal from "./projects/[projectId]/tasks/_components/edit-task-modal";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen">
       <CreateProjectModal />
       <CreateTaskModal />
+      <EditTaskModal />
       <div className="flex h-full w-full">
         <div className="fixed left-0 top-0 hidden h-full lg:block lg:w-[264px]">
           <Sidebar />

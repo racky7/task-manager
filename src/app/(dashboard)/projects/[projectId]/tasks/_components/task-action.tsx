@@ -8,6 +8,7 @@ import { PencilIcon, TrashIcon } from "lucide-react";
 import useConfirm from "@/hooks/use-confirm";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import useEditTaskModal from "../_hooks/use-edit-task-modal";
 
 interface Props {
   id: string;
@@ -16,6 +17,7 @@ interface Props {
 
 const TaskActions = ({ id, children }: Props) => {
   const utils = api.useUtils();
+  const { open } = useEditTaskModal();
   const { mutate, isPending } = api.task.deleteTask.useMutation();
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete task",

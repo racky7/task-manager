@@ -33,9 +33,10 @@ import {
   TASK_STATUS_MAP,
 } from "../_lib/constants";
 import { toast } from "sonner";
+import { type Task } from "@prisma/client";
 
-const createTaskConfig = z.object({
-  title: z.string(),
+const updateTaskConfig = z.object({
+  title: z.string().min(1, "task title is required"),
   description: z.string().optional(),
   dueDate: z.date(),
   assigneeId: z.string(),
@@ -43,28 +44,42 @@ const createTaskConfig = z.object({
   priority: z.enum(TASK_PRIORITY),
 });
 
-export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
+export const EditTaskForm = ({
+  onCancel,
+  initialValues,
+}: {
+  onCancel: () => void;
+  initialValues: Task;
+}) => {
   const utils = api.useUtils();
   const projectId = useProjectId();
   const { data: members } = api.member.getMembers.useQuery({ projectId });
-  const form = useForm<z.infer<typeof createTaskConfig>>({
-    resolver: zodResolver(createTaskConfig),
+  const form = useForm<z.infer<typeof updateTaskConfig>>({
+    resolver: zodResolver(updateTaskConfig),
+    defaultValues: initialValues
+      ? {
+          ...initialValues,
+          assigneeId: initialValues.assigneeId ?? undefined,
+          description: initialValues.description ?? undefined,
+        }
+      : {},
   });
-  const { mutate, isPending } = api.task.createTask.useMutation();
+  const { mutate, isPending } = api.task.updateTask.useMutation();
 
-  const onSubmit = (values: z.infer<typeof createTaskConfig>) => {
+  const onSubmit = (values: z.infer<typeof updateTaskConfig>) => {
     mutate(
-      { ...values, projectId },
+      { ...values, id: initialValues.id },
       {
         onSuccess: () => {
           void utils.task.getTasks.invalidate();
-          toast.success("Task created successfully");
+          void utils.task.getTask.invalidate({ taskId: initialValues.id });
+          toast.success("Task updated successfully");
           form.reset();
           onCancel?.();
         },
         onError: (err) => {
           console.log(err);
-          toast.error("Failed to create task!");
+          toast.error("Failed to update task!");
         },
       },
     );
@@ -73,7 +88,7 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
   return (
     <Card className="h-full w-full border-none shadow-none">
       <CardHeader className="flex p-7">
-        <CardTitle className="text-xl font-bold">Create a new Task</CardTitle>
+        <CardTitle className="text-xl font-bold">Edit Task</CardTitle>
       </CardHeader>
       <div className="px-7">
         <Separator />
@@ -229,7 +244,7 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
                   type="submit"
                   size="lg"
                 >
-                  Create Task
+                  Save Changes
                 </Button>
               </div>
             </div>

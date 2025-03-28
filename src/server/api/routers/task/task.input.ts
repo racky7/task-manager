@@ -2,8 +2,8 @@ import { z } from "zod";
 import { cuid } from "@/lib/validation";
 
 export const createTaskInput = z.object({
-  title: z.string(),
-  description: z.string().optional(),
+  title: z.string().max(150),
+  description: z.string().max(1000).optional(),
   projectId: cuid,
   status: z.enum(["TODO", "INPROGRESS", "INREVIEW", "DONE"]).default("TODO"),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]).default("LOW"),
@@ -21,4 +21,8 @@ export const deleteTaskInput = z.object({
 
 export const updateTaskInput = createTaskInput.partial().extend({
   id: cuid,
+});
+
+export const getTaskInput = z.object({
+  taskId: cuid,
 });

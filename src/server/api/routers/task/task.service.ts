@@ -6,6 +6,7 @@ import {
   type getTasksInput,
   type updateTaskInput,
   type createTaskInput,
+  getTaskInput,
 } from "./task.input";
 import { TRPCError } from "@trpc/server";
 
@@ -70,6 +71,35 @@ export async function getTasks(
       },
     },
   });
+}
+
+export async function getTask(
+  input: z.infer<typeof getTaskInput>,
+  session: Session,
+) {
+  const task = await db.task.findUnique({
+    where: { id: input.taskId },
+  });
+
+  if (!task) {
+    throw new Error("Task does not exist");
+  }
+
+  const member = await db.member.findFirst({
+    where: {
+      userId: session.user.id,
+      projectId: task.projectId,
+    },
+  });
+
+  if (!member) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Member does not belong to project",
+    });
+  }
+
+  return task;
 }
 
 export async function deleteTask(
