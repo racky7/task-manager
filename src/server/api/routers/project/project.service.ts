@@ -3,6 +3,7 @@ import type {
   createProjectInput,
   getProjectInput,
   joinProjectInput,
+  updateProjectInput,
 } from "./project.input";
 import { type Session } from "next-auth";
 import { db } from "@/server/db";
@@ -120,5 +121,34 @@ export async function joinProject(
       userId: session.user.id,
       role: "MEMBER",
     },
+  });
+}
+
+export async function updateProject(
+  input: z.infer<typeof updateProjectInput>,
+  session: Session,
+) {
+  const project = await db.project.findUnique({
+    where: { id: input.projectId },
+  });
+
+  if (!project) {
+    throw new TRPCError({ code: "NOT_FOUND", message: "Project not found" });
+  }
+
+  const member = await db.member.findFirst({
+    where: { projectId: input.projectId, userId: session.user.id },
+  });
+
+  if (!member || member.role !== "ADMIN") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Not authorized. Only for Admin.",
+    });
+  }
+
+  return db.project.update({
+    where: { id: input.projectId },
+    data: { name: input.name },
   });
 }

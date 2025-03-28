@@ -5,11 +5,13 @@ import {
   getProjectInfo,
   getProjects,
   joinProject,
+  updateProject,
 } from "./project.service";
 import {
   createProjectInput,
   getProjectInput,
   joinProjectInput,
+  updateProjectInput,
 } from "./project.input";
 
 export const projectRouter = createTRPCRouter({
@@ -28,4 +30,7 @@ export const projectRouter = createTRPCRouter({
   joinProject: protectedProcedure
     .input(joinProjectInput)
     .mutation(({ input, ctx: { session } }) => joinProject(input, session)),
+  updateProject: protectedProcedure
+    .input(updateProjectInput)
+    .mutation(({ input, ctx: { session } }) => updateProject(input, session)),
 });

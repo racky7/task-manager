@@ -6,28 +6,26 @@ import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
 import { useProjectId } from "../../_hooks/use-project-id";
 import { useState } from "react";
+import EditProjectForm from "./_components/edit-project-form";
+import { Loader } from "lucide-react";
 
 export default function ProjectSettingsClient() {
   const projectId = useProjectId();
-  const [projectName, setProjectName] = useState("");
+  const { data: initialValues, isLoading } = api.project.getProject.useQuery({
+    projectId,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <Loader className="animate size-6" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center space-y-6">
-      <div className="w-full max-w-xl flex-1 rounded-lg border p-4">
-        <h2 className="text-lg font-bold">Project Information</h2>
-        <div className="mt-4">
-          <label className="block text-sm font-medium">Project Name</label>
-          <Input
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            placeholder={"Enter project name"}
-            className="mt-1"
-          />
-          <div className="mt-3 flex justify-end">
-            <Button>Update</Button>
-          </div>
-        </div>
-      </div>
+      <EditProjectForm initialValues={initialValues!} />
       <div className="w-full max-w-xl flex-1 rounded-lg border p-4">
         <h2 className="text-lg font-bold">Invite Members</h2>
         <p className="text-sm text-gray-600">

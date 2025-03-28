@@ -73,6 +73,9 @@ export async function getTasks(
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }
 
