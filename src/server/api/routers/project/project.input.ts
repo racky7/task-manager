@@ -5,9 +5,14 @@ export const createProjectInput = z.object({
   name: z.string(),
 });
 
-export const updateProjectInput = createProjectInput.partial().extend({
-  projectId: cuid,
-});
+export const updateProjectInput = createProjectInput
+  .extend({
+    inviteCode: z.string().max(10),
+  })
+  .partial()
+  .extend({
+    projectId: cuid,
+  });
 
 export const getProjectInput = z.object({
   projectId: cuid,

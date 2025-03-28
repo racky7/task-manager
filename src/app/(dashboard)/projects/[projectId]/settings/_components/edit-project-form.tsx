@@ -37,6 +37,9 @@ const EditProjectForm = ({ initialValues }: { initialValues: Project }) => {
       {
         onSuccess: () => {
           toast.success("Project updated!");
+          void utils.project.getProject.invalidate({
+            projectId: initialValues.id,
+          });
           void utils.project.getProjects.invalidate();
         },
         onError: (err) => {

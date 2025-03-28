@@ -149,6 +149,6 @@ export async function updateProject(
 
   return db.project.update({
     where: { id: input.projectId },
-    data: { name: input.name },
+    data: { name: input.name, inviteCode: input.inviteCode },
   });
 }
