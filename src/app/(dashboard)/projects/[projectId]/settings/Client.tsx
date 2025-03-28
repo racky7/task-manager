@@ -13,7 +13,7 @@ export default function ProjectSettingsClient() {
 
   return (
     <div className="flex flex-col items-center space-y-6">
-      <div className="w-full max-w-2xl flex-1 rounded-lg border p-4">
+      <div className="w-full max-w-xl flex-1 rounded-lg border p-4">
         <h2 className="text-lg font-bold">Project Information</h2>
         <div className="mt-4">
           <label className="block text-sm font-medium">Project Name</label>
@@ -23,17 +23,39 @@ export default function ProjectSettingsClient() {
             placeholder={"Enter project name"}
             className="mt-1"
           />
-          <Button className="mt-2">Update</Button>
+          <div className="mt-3 flex justify-end">
+            <Button>Update</Button>
+          </div>
         </div>
       </div>
-      <div className="w-full max-w-2xl flex-1 rounded-lg border bg-red-50 p-4">
+      <div className="w-full max-w-xl flex-1 rounded-lg border p-4">
+        <h2 className="text-lg font-bold">Invite Members</h2>
+        <p className="text-sm text-gray-600">
+          Use the invite link to add members to your workspace.
+        </p>
+        <div className="mt-2 flex items-center space-x-2">
+          <Input
+            value="https://task-manager.app/projects/67e51ed40017d5ce66b4/join/WAk6Yn"
+            readOnly
+          />
+          <Button className="bg-gray-600 text-white hover:bg-gray-700">
+            Copy
+          </Button>
+        </div>
+        <div className="mt-3 flex justify-end">
+          <Button>Reset invite link</Button>
+        </div>
+      </div>
+      <div className="w-full max-w-xl flex-1 rounded-lg border bg-red-50 p-4">
         <h2 className="text-lg font-bold text-red-600">Danger Zone</h2>
         <p className="text-sm text-gray-600">
           This action is irreversible. Proceed with caution.
         </p>
-        <Button className="mt-2 bg-red-600 text-white hover:bg-red-700">
-          Delete Project
-        </Button>
+        <div className="flex justify-end">
+          <Button className="mt-2 bg-red-600 text-white hover:bg-red-700">
+            Delete Project
+          </Button>
+        </div>
       </div>
     </div>
   );

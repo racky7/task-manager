@@ -6,6 +6,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVertical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TASK_PRIORITY_MAP, TASK_STATUS_MAP } from "../_lib/constants";
+import TaskActions from "./task-action";
 
 export const columns: ColumnDef<
   Task & { assignee?: { id: string; name: string | null } | null }
@@ -130,11 +131,13 @@ export const columns: ColumnDef<
   },
   {
     id: "actions",
-    cell: ({}) => {
+    cell: ({ row }) => {
       return (
-        <Button className="size-8 p-0" variant="ghost">
-          <MoreVertical className="size-4" />
-        </Button>
+        <TaskActions id={row.original.id}>
+          <Button className="size-8 p-0" variant="ghost">
+            <MoreVertical className="size-4" />
+          </Button>
+        </TaskActions>
       );
     },
   },

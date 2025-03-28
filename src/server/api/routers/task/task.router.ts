@@ -1,6 +1,11 @@
 import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
-import { createTaskInput, getTasksInput } from "./task.input";
-import { createTask, getTasks } from "./task.service";
+import {
+  createTaskInput,
+  deleteTaskInput,
+  getTasksInput,
+  updateTaskInput,
+} from "./task.input";
+import { createTask, deleteTask, getTasks, updateTask } from "./task.service";
 
 export const taksRouter = createTRPCRouter({
   createTask: protectedProcedure
@@ -9,4 +14,10 @@ export const taksRouter = createTRPCRouter({
   getTasks: protectedProcedure
     .input(getTasksInput)
     .query(({ input, ctx: { session } }) => getTasks(input, session)),
+  deleteTask: protectedProcedure
+    .input(deleteTaskInput)
+    .mutation(({ input, ctx: { session } }) => deleteTask(input, session)),
+  updateTask: protectedProcedure
+    .input(updateTaskInput)
+    .mutation(({ input, ctx: { session } }) => updateTask(input, session)),
 });
