@@ -4,11 +4,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PencilIcon, TrashIcon } from "lucide-react";
+import { ExternalLinkIcon, PencilIcon, TrashIcon } from "lucide-react";
 import useConfirm from "@/hooks/use-confirm";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import useEditTaskModal from "../_hooks/use-edit-task-modal";
+import { useRouter } from "next/navigation";
+import { useProjectId } from "../../../_hooks/use-project-id";
 
 interface Props {
   id: string;
@@ -17,6 +19,8 @@ interface Props {
 
 const TaskActions = ({ id, children }: Props) => {
   const utils = api.useUtils();
+  const router = useRouter();
+  const projectId = useProjectId();
   const { open } = useEditTaskModal();
   const { mutate, isPending } = api.task.deleteTask.useMutation();
   const [ConfirmDialog, confirm] = useConfirm(
@@ -42,12 +46,23 @@ const TaskActions = ({ id, children }: Props) => {
     );
   };
 
+  const onOpenTask = () => {
+    router.push(`/projects/${projectId}/tasks/${id}`);
+  };
+
   return (
     <div className="flex justify-end">
       <ConfirmDialog />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem
+            onClick={onOpenTask}
+            className="p-[10px] font-medium"
+          >
+            <ExternalLinkIcon className="stroke mr-2 size-4" />
+            Task Details
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => open(id)}
             className="p-[10px] font-medium"

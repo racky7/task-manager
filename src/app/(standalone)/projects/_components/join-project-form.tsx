@@ -78,7 +78,7 @@ export const JoinProjectForm = ({
             onClick={onSubmit}
             disabled={isPending}
           >
-            Join Workspace
+            Join Project
           </Button>
         </div>
       </CardContent>

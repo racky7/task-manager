@@ -85,6 +85,14 @@ export async function getTask(
 ) {
   const task = await db.task.findUnique({
     where: { id: input.taskId },
+    include: {
+      assignee: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   });
 
   if (!task) {

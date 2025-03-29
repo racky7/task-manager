@@ -54,8 +54,8 @@ const DeleteProject = ({ initialValues }: { initialValues: Project }) => {
           <div className="flex flex-col">
             <h3 className="font-bold">Danger Zone</h3>
             <p className="text-sm text-muted-foreground">
-              Deleting a workspace is irreversable and will remove all
-              associated data.
+              Deleting a project is irreversable and will remove all associated
+              data.
             </p>
             <div className="py-7">
               <Separator />
