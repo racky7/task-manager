@@ -16,8 +16,8 @@ export default function ProjectSettingsClient() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Loader className="animate size-6" />
+      <div className="flex h-full items-center justify-center">
+        <Loader className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -27,17 +27,6 @@ export default function ProjectSettingsClient() {
       <EditProjectForm initialValues={initialValues!} />
       <InviteMembers initialValues={initialValues!} />
       <DeleteProject initialValues={initialValues!} />
-      {/* <div className="w-full max-w-xl flex-1 rounded-lg border bg-red-50 p-4">
-        <h2 className="text-lg font-bold text-red-600">Danger Zone</h2>
-        <p className="text-sm text-gray-600">
-          This action is irreversible. Proceed with caution.
-        </p>
-        <div className="flex justify-end">
-          <Button className="mt-2 bg-red-600 text-white hover:bg-red-700">
-            Delete Project
-          </Button>
-        </div>
-      </div> */}
     </div>
   );
 }
