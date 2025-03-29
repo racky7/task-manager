@@ -25,15 +25,17 @@ const DataFilters = () => {
   const { data: members } = api.member.getMembers.useQuery({ projectId });
 
   const onStatusChange = (value: string) => {
-    setFilters({ status: value === "all" ? null : (value as TaskStatus) });
+    void setFilters({ status: value === "all" ? null : (value as TaskStatus) });
   };
 
   const onAssigneeChange = (value: string) => {
-    setFilters({ assigneeId: value === "all" ? null : (value as string) });
+    void setFilters({ assigneeId: value === "all" ? null : value });
   };
 
   const onPriorityChange = (value: string) => {
-    setFilters({ priority: value === "all" ? null : (value as TaskPriority) });
+    void setFilters({
+      priority: value === "all" ? null : (value as TaskPriority),
+    });
   };
 
   return (

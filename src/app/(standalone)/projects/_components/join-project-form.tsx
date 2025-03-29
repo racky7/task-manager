@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useProjectId } from "@/app/(dashboard)/projects/_hooks/use-project-id";
 import { useInviteCode } from "@/app/(dashboard)/projects/_hooks/use-invite-code";
-import { type Project } from "@prisma/client";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 

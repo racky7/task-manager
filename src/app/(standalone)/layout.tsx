@@ -1,5 +1,4 @@
 import { UserButton } from "@/components/auth/user-button";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function StandaloneLayout({

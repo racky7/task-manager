@@ -16,7 +16,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
-// import { useToast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 const signupConfig = z.object({
   name: z.string().trim().min(1, { message: "Fullname is required" }),
@@ -26,20 +26,13 @@ const signupConfig = z.object({
 
 export default function SignupForm() {
   const router = useRouter();
-  // const { toast } = useToast();
   const signUpUserMutation = api.user.signUpUser.useMutation({
     onSuccess: () => {
-      // toast({
-      //   title: "Sign Up Sucessfully",
-      // });
+      toast.success("Sign Up Sucessfully");
       router.push("/login");
     },
     onError: (error) => {
-      // toast({
-      //   title: "Sign Up failed!",
-      //   variant: "destructive",
-      //   description: error.message,
-      // });
+      toast.error(error.message);
     },
   });
 

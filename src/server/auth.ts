@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, {
+import {
   getServerSession,
   Session,
   type DefaultSession,
@@ -9,7 +9,6 @@ import { type Adapter } from "next-auth/adapters";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "@/server/db";
 import { z } from "zod";
-import { cache } from "react";
 import bcrypt from "bcryptjs";
 
 const loginConfig = z.object({
@@ -93,10 +92,7 @@ export const authOptions: NextAuthOptions = {
 
           if (!user?.password) return null;
 
-          const passwordMatch = await bcrypt.compare(
-            password,
-            user.password as string,
-          );
+          const passwordMatch = await bcrypt.compare(password, user.password);
 
           if (passwordMatch) return user;
         }

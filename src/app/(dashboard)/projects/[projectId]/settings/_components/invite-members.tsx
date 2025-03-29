@@ -44,7 +44,8 @@ const InviteMembers = ({ initialValues }: { initialValues: Project }) => {
   const handleCopyInviteLink = () => {
     navigator.clipboard
       .writeText(fullInviteLink)
-      .then(() => toast.success("Invite link copied to clipboard"));
+      .then(() => toast.success("Invite link copied to clipboard"))
+      .catch(() => toast.error("Failed to copy invite link to clipboard"));
   };
 
   return (

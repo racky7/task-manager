@@ -41,7 +41,7 @@ const TaskOverview = ({
             variant="outline"
             size="sm"
             onClick={() => {
-              open(task.id);
+              void open(task.id);
             }}
           >
             <PencilIcon className="mr-1" />

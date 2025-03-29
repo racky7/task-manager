@@ -26,8 +26,10 @@ const MembersList = () => {
     "destructive",
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   const handleUpdateMember = (memberId: string, role: Member["role"]) => {};
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeleteMember = async (memberId: string) => {
     const ok = await confirm();
     if (!ok) return;

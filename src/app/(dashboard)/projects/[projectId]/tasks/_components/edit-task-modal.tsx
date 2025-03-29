@@ -2,7 +2,6 @@
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import useEditTaskModal from "../_hooks/use-edit-task-modal";
-import { EditTaskForm } from "./edit-task-form";
 import EditTaskFormWrapper from "./edit-task-form-wrapper";
 
 export default function EditTaskModal() {
