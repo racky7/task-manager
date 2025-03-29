@@ -1,5 +1,6 @@
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
+import ProjectIdClientPage from "./Client";
 
 export default async function ProjectIdPage() {
   const session = await getServerAuthSession();
@@ -8,5 +9,5 @@ export default async function ProjectIdPage() {
     return redirect("/login");
   }
 
-  return <div>Project Id page</div>;
+  return <ProjectIdClientPage />;
 }

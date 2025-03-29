@@ -58,6 +58,7 @@ export const CreateTaskForm = ({ onCancel }: { onCancel: () => void }) => {
       {
         onSuccess: () => {
           void utils.task.getTasks.invalidate();
+          void utils.project.getProjectAnalytics.invalidate({ projectId });
           toast.success("Task created successfully");
           form.reset();
           onCancel?.();

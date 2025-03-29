@@ -2,6 +2,7 @@ import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
 import {
   createProject,
   getProject,
+  getProjectAnalytics,
   getProjectInfo,
   getProjects,
   joinProject,
@@ -33,4 +34,9 @@ export const projectRouter = createTRPCRouter({
   updateProject: protectedProcedure
     .input(updateProjectInput)
     .mutation(({ input, ctx: { session } }) => updateProject(input, session)),
+  getProjectAnalytics: protectedProcedure
+    .input(getProjectInput)
+    .query(({ input, ctx: { session } }) =>
+      getProjectAnalytics(input, session),
+    ),
 });

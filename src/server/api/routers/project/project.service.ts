@@ -152,3 +152,52 @@ export async function updateProject(
     data: { name: input.name, inviteCode: input.inviteCode },
   });
 }
+
+export async function getProjectAnalytics(
+  input: z.infer<typeof getProjectInput>,
+  session: Session,
+) {
+  const member = await db.member.findFirst({
+    where: {
+      projectId: input.projectId,
+      userId: session.user.id,
+    },
+  });
+
+  if (!member) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Member does not belong to project",
+    });
+  }
+
+  const totalTasks = await db.task.count({
+    where: { projectId: input.projectId },
+  });
+
+  const assignedTasks = await db.task.count({
+    where: { projectId: input.projectId, assigneeId: session.user.id },
+  });
+
+  const completedTasks = await db.task.count({
+    where: { projectId: input.projectId, status: "DONE" },
+  });
+
+  const overdueTasks = await db.task.count({
+    where: {
+      projectId: input.projectId,
+      status: { not: "DONE" },
+      dueDate: { lt: new Date() },
+    },
+  });
+
+  const incompleteTasks = totalTasks - completedTasks;
+
+  return {
+    totalTasks,
+    assignedTasks,
+    completedTasks,
+    overdueTasks,
+    incompleteTasks,
+  };
+}
