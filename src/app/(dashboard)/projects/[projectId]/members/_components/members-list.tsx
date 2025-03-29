@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon } from "lucide-react";
+import { Loader, MoreVerticalIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Fragment } from "react";
@@ -16,23 +16,56 @@ import useConfirm from "@/hooks/use-confirm";
 import { api } from "@/trpc/react";
 import { MemberAvatar } from "@/components/member-avatar";
 import { Member } from "@prisma/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const MembersList = () => {
+const MembersList = ({ userId }: { userId: string }) => {
   const projectId = useProjectId();
-  const { data } = api.member.getMembers.useQuery({ projectId });
+  const router = useRouter();
+  const utils = api.useUtils();
+  const { data, isLoading } = api.member.getMembers.useQuery({ projectId });
+  const { mutate, isPending: isDeletingMember } =
+    api.member.deleteMember.useMutation();
   const [ConfirmDialog, confirm] = useConfirm(
     "Remove member",
     "This member will be removed from the project",
     "destructive",
   );
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Loader className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  const userMembership = data!.find((member) => member.userId === userId);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   const handleUpdateMember = (memberId: string, role: Member["role"]) => {};
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeleteMember = async (memberId: string) => {
     const ok = await confirm();
     if (!ok) return;
+
+    mutate(
+      { memberId },
+      {
+        onSuccess: () => {
+          toast.success("Removed from project successfully");
+          utils.member.getMembers.invalidate({ projectId });
+          utils.task.getTasks.invalidate({ projectId });
+          utils.project.getProjectAnalytics.invalidate({ projectId });
+          if (userMembership?.id === memberId) {
+            router.push("/");
+          }
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      },
+    );
   };
 
   return (
@@ -55,40 +88,64 @@ const MembersList = () => {
                   fallbackClassName="text-lg"
                 />
                 <div className="flex flex-col">
-                  <p className="text-sm font-medium">{member.user.name!} </p>
+                  <p className="text-sm font-medium">
+                    {member.user.name!} {member.userId === userId && "(You)"}
+                  </p>
                   <p className="text-sm text-muted-foreground">
                     {member.user?.email}
                   </p>
-                  <p className="text-xs">{member.role} </p>
+                  <p className="text-xs">{member.role}</p>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="secondary" className="ml-auto">
+                    <Button
+                      size="icon"
+                      disabled={
+                        member.userId !== userId &&
+                        userMembership?.role !== "ADMIN"
+                      }
+                      variant="secondary"
+                      className="ml-auto"
+                    >
                       <MoreVerticalIcon className="size-4 text-muted-foreground" />
                     </Button>
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent side="bottom" align="end">
-                    <DropdownMenuItem
-                      className="font-medium"
-                      onClick={() => handleUpdateMember(member.id, "ADMIN")}
-                      // disabled={isUpdatingMember}
-                    >
-                      Set as Administrator
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="font-medium"
-                      onClick={() => handleUpdateMember(member.id, "MEMBER")}
-                      // disabled={isUpdatingMember}
-                    >
-                      Set as member
-                    </DropdownMenuItem>
+                    {userMembership?.role === "ADMIN" ? (
+                      <>
+                        {member.role === "MEMBER" ? (
+                          <DropdownMenuItem
+                            className="font-medium"
+                            onClick={() =>
+                              handleUpdateMember(member.id, "ADMIN")
+                            }
+                            // disabled={isUpdatingMember}
+                          >
+                            Set as Administrator
+                          </DropdownMenuItem>
+                        ) : null}
+                        {member.role === "ADMIN" ? (
+                          <DropdownMenuItem
+                            className="font-medium"
+                            onClick={() =>
+                              handleUpdateMember(member.id, "MEMBER")
+                            }
+                            // disabled={isUpdatingMember}
+                          >
+                            Set as member
+                          </DropdownMenuItem>
+                        ) : null}
+                      </>
+                    ) : null}
                     <DropdownMenuItem
                       className="font-medium text-amber-700"
                       onClick={() => handleDeleteMember(member.id)}
-                      // disabled={isDeletingMember}
+                      disabled={isDeletingMember}
                     >
-                      Remove
+                      {userId === member.userId
+                        ? "Leave project"
+                        : "Remove from Project"}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -51,11 +51,17 @@ const TaskOverview = ({
         <Separator className="my-4" />
         <div className="flex flex-col gap-4">
           <TaskProperty label="Assignee">
-            <MemberAvatar
-              name={task.assignee?.name ?? "U"}
-              className="size-6"
-            />
-            <p className="text-sm font-medium">{task.assignee?.name}</p>
+            {task.assignee ? (
+              <>
+                <MemberAvatar
+                  name={task.assignee?.name ?? "U"}
+                  className="size-6"
+                />
+                <p className="text-sm font-medium">{task.assignee?.name}</p>
+              </>
+            ) : (
+              <p>-</p>
+            )}
           </TaskProperty>
           <TaskProperty label="Status">
             <Badge

@@ -11,7 +11,7 @@ export default async function ProjectMembersPage() {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <MembersList />
+      <MembersList userId={session.user.id} />
     </div>
   );
 }
