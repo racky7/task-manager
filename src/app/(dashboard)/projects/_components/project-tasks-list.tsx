@@ -6,7 +6,7 @@ import { Calendar1Icon, PlusIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatDistanceToNow, format } from "date-fns";
+import { format } from "date-fns";
 
 export const ProjectTaskList = ({
   data,

@@ -52,7 +52,7 @@ const MembersList = ({ userId }: { userId: string }) => {
       {
         onSuccess: () => {
           toast.success("Member role update successfully");
-          utils.member.getMembers.invalidate({ projectId });
+          void utils.member.getMembers.invalidate({ projectId });
         },
         onError: (err) => {
           toast.error(err.message);
@@ -70,9 +70,9 @@ const MembersList = ({ userId }: { userId: string }) => {
       {
         onSuccess: () => {
           toast.success("Removed from project successfully");
-          utils.member.getMembers.invalidate({ projectId });
-          utils.task.getTasks.invalidate({ projectId });
-          utils.project.getProjectAnalytics.invalidate({ projectId });
+          void utils.member.getMembers.invalidate({ projectId });
+          void utils.task.getTasks.invalidate({ projectId });
+          void utils.project.getProjectAnalytics.invalidate({ projectId });
           if (userMembership?.id === memberId) {
             router.push("/");
           }

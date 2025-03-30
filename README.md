@@ -1,29 +1,74 @@
-# Create T3 App
+# Task Manager
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Task Manager is a tool built using the T3 stack. It leverages Next.js, TypeScript, tRPC, Prisma, Supabase, and SST (Serverless Stack) on AWS.
 
-## What's next? How do I make an app with this?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Installation
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+1. Clone the repository:
+```bash
+git clone https://github.com/racky7/task-manager/
+cd task-manager
+```
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn More
+3. Configure environment variables
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```bash
+cp .env.example .env
+```
+You need to set up the following environment variables:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+DATABASE_URL – PostgreSQL connection string
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+DIRECT_URL – PostgreSQL connection string
 
-## How do I deploy this?
+AUTH_SECRET – Secret key for authentication
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+4. Run the development server:
+```bash
+npm run dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Deployment Instructions
+
+Follow these steps to deploy the Next.js app:
+
+1. **Configure AWS Credentials:**  
+   Update your `~/.aws/credentials` file with your AWS access details:
+
+   ```ini
+   [default]
+   aws_access_key_id = <YOUR_ACCESS_KEY_ID>
+   aws_secret_access_key = <YOUR_SECRET_ACCESS_KEY>
+   ```
+
+2. **Deploy the Application:**  
+   Run the following command to deploy the app:  
+   ```sh
+   npm run deploy:prod
+   ```
+
+3. **Copy the Deployed URL:**  
+   After deployment, copy the deployed URL provided in the terminal.
+
+4. **Update Environment Variables:**  
+   Modify the `.env` file and update the `NEXTAUTH_URL` with the deployed URL:  
+   ```ini
+   NEXTAUTH_URL=<DEPLOYED_URL>
+   ```
+
+5. **Redeploy the Application:**  
+   Run the deployment command again to apply the changes:  
+   ```sh
+   npm run deploy:prod
+   ```
+
+Your application should now be successfully deployed with the correct authentication URL.

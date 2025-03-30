@@ -28,7 +28,7 @@ const DeleteProject = ({ initialValues }: { initialValues: Project }) => {
       {
         onSuccess: () => {
           toast.success("Project deleted successfully");
-          utils.project.getProjects.invalidate();
+          void utils.project.getProjects.invalidate();
           router.push("/");
         },
         onError: (err) => {
