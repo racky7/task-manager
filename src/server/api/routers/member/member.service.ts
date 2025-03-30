@@ -1,6 +1,7 @@
 import { type z } from "zod";
 import {
   deleteProjectMemberInput,
+  updateMemberInput,
   type getProjectMembersInput,
 } from "./member.input";
 import { type Session } from "next-auth";
@@ -112,5 +113,59 @@ export async function deleteProjectMember(
     await prisma.member.delete({
       where: { id: input.memberId },
     });
+  });
+}
+
+export async function updateMember(
+  input: z.infer<typeof updateMemberInput>,
+  session: Session,
+) {
+  const memberToUpdate = await db.member.findUnique({
+    where: {
+      id: input.memberId,
+    },
+  });
+
+  if (!memberToUpdate) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Member not found.",
+    });
+  }
+
+  const member = await db.member.findFirst({
+    where: {
+      projectId: memberToUpdate.projectId,
+      userId: session.user.id,
+    },
+  });
+
+  if (!member || member.role !== "ADMIN") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Unauthorized. Only for admin.",
+    });
+  }
+
+  const allMembersInProject = await db.member.findMany({
+    where: {
+      projectId: member.projectId,
+    },
+  });
+
+  if (allMembersInProject.length === 1) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Cannot downgrade the only member.",
+    });
+  }
+
+  return db.member.update({
+    where: {
+      id: memberToUpdate.id,
+    },
+    data: {
+      role: input.role,
+    },
   });
 }

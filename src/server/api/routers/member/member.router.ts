@@ -1,8 +1,13 @@
 import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
-import { deleteProjectMember, getProjectMembers } from "./member.service";
+import {
+  deleteProjectMember,
+  getProjectMembers,
+  updateMember,
+} from "./member.service";
 import {
   deleteProjectMemberInput,
   getProjectMembersInput,
+  updateMemberInput,
 } from "./member.input";
 
 export const memberRouter = createTRPCRouter({
@@ -14,4 +19,7 @@ export const memberRouter = createTRPCRouter({
     .mutation(({ input, ctx: { session } }) =>
       deleteProjectMember(input, session),
     ),
+  updateMember: protectedProcedure
+    .input(updateMemberInput)
+    .mutation(({ input, ctx: { session } }) => updateMember(input, session)),
 });

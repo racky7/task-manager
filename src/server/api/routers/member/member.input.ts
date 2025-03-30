@@ -8,3 +8,8 @@ export const getProjectMembersInput = z.object({
 export const deleteProjectMemberInput = z.object({
   memberId: cuid,
 });
+
+export const updateMemberInput = z.object({
+  memberId: cuid,
+  role: z.enum(["ADMIN", "MEMBER"]),
+});

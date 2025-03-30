@@ -23,9 +23,13 @@ const MembersList = ({ userId }: { userId: string }) => {
   const projectId = useProjectId();
   const router = useRouter();
   const utils = api.useUtils();
+
   const { data, isLoading } = api.member.getMembers.useQuery({ projectId });
-  const { mutate, isPending: isDeletingMember } =
+  const { mutate: updateMemberMutation, isPending: isUpdatingMember } =
+    api.member.updateMember.useMutation();
+  const { mutate: deleteMemberMutation, isPending: isDeletingMember } =
     api.member.deleteMember.useMutation();
+
   const [ConfirmDialog, confirm] = useConfirm(
     "Remove member",
     "This member will be removed from the project",
@@ -42,14 +46,26 @@ const MembersList = ({ userId }: { userId: string }) => {
 
   const userMembership = data!.find((member) => member.userId === userId);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  const handleUpdateMember = (memberId: string, role: Member["role"]) => {};
+  const handleUpdateMember = (memberId: string, role: Member["role"]) => {
+    updateMemberMutation(
+      { memberId, role },
+      {
+        onSuccess: () => {
+          toast.success("Member role update successfully");
+          utils.member.getMembers.invalidate({ projectId });
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      },
+    );
+  };
 
   const handleDeleteMember = async (memberId: string) => {
     const ok = await confirm();
     if (!ok) return;
 
-    mutate(
+    deleteMemberMutation(
       { memberId },
       {
         onSuccess: () => {
@@ -120,7 +136,7 @@ const MembersList = ({ userId }: { userId: string }) => {
                             onClick={() =>
                               handleUpdateMember(member.id, "ADMIN")
                             }
-                            // disabled={isUpdatingMember}
+                            disabled={isUpdatingMember}
                           >
                             Set as Administrator
                           </DropdownMenuItem>
@@ -131,7 +147,7 @@ const MembersList = ({ userId }: { userId: string }) => {
                             onClick={() =>
                               handleUpdateMember(member.id, "MEMBER")
                             }
-                            // disabled={isUpdatingMember}
+                            disabled={isUpdatingMember}
                           >
                             Set as member
                           </DropdownMenuItem>
