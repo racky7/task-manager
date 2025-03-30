@@ -22,3 +22,7 @@ export const joinProjectInput = z.object({
   projectId: cuid,
   code: z.string(),
 });
+
+export const deleteProjectInput = z.object({
+  projectId: cuid,
+});

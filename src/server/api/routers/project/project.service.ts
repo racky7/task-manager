@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import type {
   createProjectInput,
+  deleteProjectInput,
   getProjectInput,
   joinProjectInput,
   updateProjectInput,
@@ -200,4 +201,40 @@ export async function getProjectAnalytics(
     overdueTasks,
     incompleteTasks,
   };
+}
+
+export async function deleteProject(
+  input: z.infer<typeof deleteProjectInput>,
+  session: Session,
+) {
+  const project = await db.project.findUnique({
+    where: { id: input.projectId },
+  });
+
+  if (!project) {
+    throw new TRPCError({ code: "NOT_FOUND", message: "Project not found" });
+  }
+
+  const member = await db.member.findFirst({
+    where: { projectId: input.projectId, userId: session.user.id },
+  });
+
+  if (!member || member.role !== "ADMIN") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Not authorized. Only for Admin.",
+    });
+  }
+
+  await db.member.deleteMany({
+    where: { projectId: input.projectId },
+  });
+
+  await db.task.deleteMany({
+    where: { projectId: input.projectId },
+  });
+
+  return db.project.delete({
+    where: { id: input.projectId },
+  });
 }

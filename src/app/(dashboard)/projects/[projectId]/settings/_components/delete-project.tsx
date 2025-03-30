@@ -2,14 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useConfirm from "@/hooks/use-confirm";
-import { generateInviteCode } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { Project } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const DeleteProject = ({ initialValues }: { initialValues: Project }) => {
+  const router = useRouter();
   const utils = api.useUtils();
-  const { mutate, isPending } = api.project.updateProject.useMutation();
+  const { mutate, isPending } = api.project.deleteProject.useMutation();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete project",
@@ -23,14 +24,12 @@ const DeleteProject = ({ initialValues }: { initialValues: Project }) => {
     if (!ok) return;
 
     mutate(
-      { inviteCode: generateInviteCode(6), projectId: initialValues.id },
+      { projectId: initialValues.id },
       {
         onSuccess: () => {
-          toast.success("Project invite code updated!");
-          void utils.project.getProject.invalidate({
-            projectId: initialValues.id,
-          });
-          void utils.project.getProjects.invalidate();
+          toast.success("Project deleted successfully");
+          utils.project.getProjects.invalidate();
+          router.push("/");
         },
         onError: (err) => {
           toast.error(err.message);

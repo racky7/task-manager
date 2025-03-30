@@ -1,6 +1,7 @@
 import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
 import {
   createProject,
+  deleteProject,
   getProject,
   getProjectAnalytics,
   getProjectInfo,
@@ -10,6 +11,7 @@ import {
 } from "./project.service";
 import {
   createProjectInput,
+  deleteProjectInput,
   getProjectInput,
   joinProjectInput,
   updateProjectInput,
@@ -39,4 +41,7 @@ export const projectRouter = createTRPCRouter({
     .query(({ input, ctx: { session } }) =>
       getProjectAnalytics(input, session),
     ),
+  deleteProject: protectedProcedure
+    .input(deleteProjectInput)
+    .mutation(({ input, ctx: { session } }) => deleteProject(input, session)),
 });
