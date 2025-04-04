@@ -1,6 +1,6 @@
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
-import ProjectTasksClient from "./Client";
+import TaskViewSwitcher from "./_components/task-view-switcher";
 
 export default async function ProjectTasksPage() {
   const session = await getServerAuthSession();
@@ -9,5 +9,9 @@ export default async function ProjectTasksPage() {
     return redirect("/login");
   }
 
-  return <ProjectTasksClient />;
+  return (
+    <div className="flex h-full flex-col">
+      <TaskViewSwitcher />
+    </div>
+  );
 }
