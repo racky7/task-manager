@@ -12,6 +12,7 @@ import DataFilters from "./data-filters";
 import { useTaskFilters } from "../_hooks/use-task-filters";
 import { useProjectId } from "../../../_hooks/use-project-id";
 import { useQueryState } from "nuqs";
+import DataKanban from "./data-kanban";
 
 const TaskViewSwitcher = () => {
   const [view, setView] = useQueryState("task-view", {
@@ -45,8 +46,12 @@ const TaskViewSwitcher = () => {
             New Task
           </Button>
         </div>
-        <Separator className="my-4" />
-        <DataFilters />
+        {view === "table" ? (
+          <>
+            <Separator className="my-4" />
+            <DataFilters />
+          </>
+        ) : null}
         <Separator className="my-4" />
 
         {isTasksLoading ? (
@@ -58,7 +63,9 @@ const TaskViewSwitcher = () => {
             <TabsContent value="table">
               <DataTable columns={columns} data={tasks!} />
             </TabsContent>
-            <TabsContent value="kanban">Kanban view</TabsContent>
+            <TabsContent value="kanban">
+              <DataKanban data={tasks!} />
+            </TabsContent>
           </>
         )}
       </div>

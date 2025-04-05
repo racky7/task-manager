@@ -10,7 +10,7 @@ export default async function ProjectTasksPage() {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col">
       <TaskViewSwitcher />
     </div>
   );
